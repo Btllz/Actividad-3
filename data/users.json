@@ -1,1 +1,32 @@
-[]
+[
+  {
+    "id": 1,
+    "correo": "admin@correo.com",
+    "password": "$2b$10$6XvkF.Mg2mGVpeHMWLENoumIzWFybcNGHtsWQFslpfuKEt5fM0AWW"
+  },
+  {
+    "id": 2,
+    "correo": "correo@correo.com",
+    "password": "$2b$10$FIkOVSJNSPsvuOiMSd/Ab.nm8FaHvt./58z.28nG62RPFTSogABo6"
+  },
+  {
+    "id": 3,
+    "correo": "correo2@correo.com",
+    "password": "$2b$10$oZwftGk/OZsiQsnLk3luN.rAzqDFx6tpRa5gXw/13lawkXZkAZvKq"
+  },
+  {
+    "id": 4,
+    "correo": "correo3@correo.com",
+    "password": "$2b$10$ZzIdIKS9Sz1TjTxqbj6kjOwPOOOTD55.vfulRVzpqWNduD4XmcwDy"
+  },
+  {
+    "id": 5,
+    "correo": "correo4@correo.com",
+    "password": "$2b$10$DthmxNuiubIP.JkEHA5vEusMWbWBQGLHBjII/yqCRoNbsiGs6snsq"
+  },
+  {
+    "id": 6,
+    "correo": "usercorreo@correo.com",
+    "password": "$2b$10$.EyEB.3iKN4y89eW5XV00e7I1manTAUX3xDpjYQVHDmoYx0PkV6Au"
+  }
+]
