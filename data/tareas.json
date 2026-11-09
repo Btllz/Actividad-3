@@ -1,11 +1,3 @@
 [
-  {
-    "id": 7,
-    "usuarioId": 6,
-    "nombre": "Estudiar",
-    "descripcion": "PReparasre para el examen de desarrollo full stack",
-    "fechaInicio": "2026-11-09",
-    "fechaFin": "2026-11-19",
-    "completa": false
-  }
+
 ]

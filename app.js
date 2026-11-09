@@ -45,6 +45,7 @@ function obtenerTareas(){
 
 function guardarUsuarios(users) {
     fs.writeFileSync(ruta_usuarios, JSON.stringify(users, null, 2));
+    console.log('Guardado en: ', ruta_usuarios);
 }
 const todos = [...obtenerUsuarios(), ...obtenerTareas()]; // [...a, ...b] junta dos arreglos en uno
 let idCounter = todos.length ? Math.max(...todos.map(x => x.id)) : 0; //todos.map(x => x.id) saca solo los id, math.max encuentra el mayor, si no hay datos empieza en 0
@@ -66,6 +67,7 @@ function verificarToken(req, res, next){
         req.usuario = datos;
         next();
     } catch (error){
+        console.log(error.message);
         return res.status(401).json({error: 'Token invalido o expirado'});
     }
 }
@@ -141,8 +143,12 @@ app.post('/tareas', verificarToken, (req, res) => {
     res.status(201).json(nuevo);
 });
 
-
-
+//-------------------------------CADA USUARIO VE SUS PROPIAS TAREAS-----------------------------------------
+app.get('/tareas', verificarToken, (req, res) => {
+    const tareas = obtenerTareas();
+    const misTareas = tareas.filter(t => t.usuarioId === req.usuario.id);
+    return res.json(misTareas);
+});
 
 if(!llaveSecreta){
     console.error('falta jwt');
