@@ -1,3 +1,29 @@
 [
-
+  {
+    "id": 3,
+    "usuarioId": 1,
+    "nombre": "Estudiar",
+    "descripcion": "Prepararse para el examen de desarrollo full stack",
+    "fechaInicio": "2026-11-09",
+    "fechaFin": "2026-11-19",
+    "completa": false
+  },
+  {
+    "id": 4,
+    "usuarioId": 2,
+    "nombre": "Estudiar",
+    "descripcion": "Prepararse para el examen de gestion de redes",
+    "fechaInicio": "2026-11-09",
+    "fechaFin": "2026-11-19",
+    "completa": false
+  },
+  {
+    "id": 5,
+    "usuarioId": 1,
+    "nombre": "Estudiar",
+    "descripcion": "Prepararse para el examen de gestion de redes",
+    "fechaInicio": "2026-11-09",
+    "fechaFin": "2026-11-19",
+    "completa": false
+  }
 ]

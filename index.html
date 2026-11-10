@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset = "utf-8">
+    <meta name="Actividad 3" content="Gestión de tareas">
+    <title>Actividad 3</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<style>
+    .oculto {display: none;}
+</style>
+
+<body>
+    <div id="seccionLogin"> 
+        <h1>Iniciar sesión</h1>
+        <form id="loginForm">
+            <input type="email" id="correo" placeholder="correo@correo.com" required>
+            <input type="password" id="password" placeholder="password" required>
+            <button type="submit">Continuar</button>
+        </form>
+    </div>
+
+
+    <div id="seccionVer">
+        <h2>Tus tareas</h2>
+        <ul id="listaMateriales"></ul>
+    </div>
+
+
+    <div id="seccionAgregar">
+        <h2>Agregar tarea</h2>
+        <form>    
+            <input type="text" id="nombreTarea" placeholder="nombre" required>
+            <input type="text" id="descripcion" placeholder="descripción" required>
+            <input type="date" id="fechaInicio" placeholder="fecha de inicio" required>
+            <input type="date" id="fechaFin" placeholder="fecha de finalizacion" required>
+            <label>Completa: <input type="checkbox" id="completa"></label>
+            <button type="submit">Guardar tarea</button>
+        </form>
+    </div>
+
+</body>
+</html>

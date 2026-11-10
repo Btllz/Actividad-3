@@ -155,8 +155,51 @@ if(!llaveSecreta){
     process.exit(1);
 }
 
+//-----------------------------------UPDATE--------------------------------------------
+app.put('/tareas/:id', verificarToken, (req, res)=>{
+    const idTareas = Number(req.params.id);
+    // const {nombre, descripcion, fechaInicio, fechaFin, completa} = req.body;
+    const tareas = obtenerTareas();
+
+    const tarea = tareas.find(t => t.id === t.usuarioId);
+
+    if (!tarea){
+        return res.send(404).json({error: 'Tarea no encontrada'});
+    }
+
+    tarea.nombre = req.body.nombre ?? tarea.nombre;
+    tarea.descripcion = req.body.descripcion ?? tarea.descripcion;
+    tarea.fechaInicio = req.body.fechaInicio ?? tarea.fechaInicio;
+    tarea.fechaFin = req.body.fechaFin ?? tarea.fechaFin;
+    tarea.completa = req.body.completa ?? tarea.completa;
+
+
+    guardarTareas(tareas);
+
+    res.json()({mensaje: 'Tarea actualizada', tarea});
+
+});
+
+
+app.delete('/tareas/:id', verificarToken, (req, res) => {
+    
+    const tareas = obtenerTareas();
+    const idTarea = Number(req.params.id); 
+    
+    //la tarea cuyo id es el de la URL y cuyo dueño es el usuario del token
+    const indice = tareas.findIndex(t => t.id === idTarea && t.usuarioId === req.usuario.id);
+
+    if (indice === -1) {
+        return res.status(404).json({error: 'Tarea inexistente'});
+    }
+
+    tareas.splice(indice, 1);
+    guardarTareas(tareas);
+    res.status(204).send();
+
+});
+
 //servidor
 app.listen(PORT, () => {
     console.log(`Servidor ejecutandose en el puerto ${PORT}`);
 });
-
