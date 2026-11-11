@@ -8,5 +8,15 @@
     "id": 2,
     "correo": "correo76@correo.com",
     "password": "$2b$10$j5wvZsdKhnbsDdnTiBVxNujTFg05UjVCWYc.pVsCK2zSUbUOXglK."
+  },
+  {
+    "id": 6,
+    "correo": "admin@correo.com",
+    "password": "$2b$10$.0D5WQxI8eKEMqodrJmRUuZl1a4Qoc4W9JCHO5HRjW46sMbDKxVv6"
+  },
+  {
+    "id": 7,
+    "correo": "admin67@correo.com",
+    "password": "$2b$10$qAAwMWgnOCvYFoBMsRnQnec1hdQPHqlyyQzRLlAxDMc.aDz4hmNQ."
   }
 ]

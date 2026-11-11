@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+    <meta charset = "utf-8">
+    <title>Actividad 3</title>
+    <link rel="stylesheet" href="styles.css">
+<style>
+    .oculto {display: none;}
+</style>
+</head>
+
+<body>
+    <p id="errorMensaje" class="oculto"></p>
+
+    <div id="seccionRegistro" class="oculto">
+        <h2>Registro</h2>
+        <form id="registerForm">
+            <input type="email" id="correoRegistro" placeholder="correo@correo.com" required>
+            <input type="password" id="passwordRegistro" placeholder="contraseña" required>
+            <button type="submit">Registrarse</button><button type="button" id="volverInicioSesion">Ya tengo cuenta!</button>
+        </form>
+    </div>
+
+
+    <div id="seccionLogin"> 
+        <h1>Iniciar sesión</h1>
+        <form id="loginForm">
+            <input type="email" id="correo" placeholder="correo@correo.com" required>
+            <input type="password" id="password" placeholder="contraseña" required>
+            <button type="submit">Continuar</button><button type="button" id="botonRegistro">Registrarse</button>
+        </form>
+    </div>
+
+
+    <div id="seccionVer" class="oculto">
+        <h2>Tus tareas</h2>
+        <ul id="listaTareas"></ul>
+        <button type="button" id="cerrarSesion">Cerrar sesión</button>
+    </div>
+
+
+    <div id="seccionAgregar" class="oculto">
+        <h2>Agregar tarea</h2>
+        <form id="agregarTarea">    
+            <input type="text" id="nombreTarea" placeholder="nombre" required>
+            <input type="text" id="descripcion" placeholder="descripción" required>
+            <input type="date" id="fechaInicio" required>
+            <input type="date" id="fechaFin" required>
+            <label>Completa: <input type="checkbox" id="completa"></label>
+            <button type="submit">Guardar tarea</button>
+        </form>
+    </div>
+<script>
+    //----------------------------------LISTENERS-------------------------------------------
+    const mensaje = document.getElementById('errorMensaje');
+
+if (localStorage.getItem('token')){
+    mostrar('seccionVer', 'seccionAgregar');
+    cargarTareas();
+} else {
+    mostrar('seccionLogin');
+}
+
+let temporizador = setTimeout(() => mensaje.classList.add('oculto'), 15000);
+//--------------------------------FUNCIONES------------------------------------------------------
+    function mostrarMensaje(texto){
+        clearTimeout(temporizador);
+        mensaje.textContent = texto;
+        mensaje.classList.remove('oculto');
+        temporizador = setTimeout(() => mensaje.classList.add('oculto'), 15000);
+    }
+
+    function mostrar(...ids){
+        ['seccionRegistro', 'seccionLogin', 'seccionVer', 'seccionAgregar']
+            .forEach(id => document.getElementById(id).classList.add('oculto'));
+        ids.forEach(id => document.getElementById(id).classList.remove('oculto'));
+    }
+
+
+//---------------------------------------------LOGIN-----------------------------------------------
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const correo = document.getElementById('correo').value;
+        const password = document.getElementById('password').value;
+
+        const respuesta = await fetch('/auth/login', {
+            method: 'POST',
+            headers: {'content-type': 'application/json'},
+            body: JSON.stringify({correo, password})
+        });
+
+        const datos = await respuesta.json();
+
+        if (!respuesta.ok) {
+            return mostrarMensaje(datos.error);
+        }
+
+        localStorage.setItem('token', datos.token);
+        mostrar('seccionVer', 'seccionAgregar');
+        cargarTareas();
+
+    });
+    
+//---------------------------------------REGISTRO------------------------------------------------------
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const correo = document.getElementById('correoRegistro').value;
+        const password = document.getElementById('passwordRegistro').value;
+
+        const respuesta = await fetch('/auth/register', {
+            method: 'POST',
+            headers: {'content-type': 'application/json'},
+            body: JSON.stringify({correo, password})
+        });
+        const datos = await respuesta.json();
+
+        if (!respuesta.ok){
+            return mostrarMensaje(datos.error);
+        }
+
+        mostrar('seccionLogin')
+    });
+
+//------------------------------------------------VER------------------------------------
+async function cargarTareas(){
+    const respuesta = await fetch('/tareas', {
+        headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}
+    });
+
+    const tareas = await respuesta.json();
+
+    if (respuesta.status === 401){
+        localStorage.removeItem('token');
+        mostrar('seccionLogin');
+        return;
+    }
+
+    if (!respuesta.ok){
+        return mostrarMensaje(tareas.error);
+    }
+
+    const lista = document.getElementById('listaTareas');
+    lista.innerHTML = '';
+
+    tareas.forEach(t => {
+        const li = document.createElement('li');
+        li.textContent = `Nombre: ${t.nombre} - Descripcion: ${t.descripcion} - Fecha de inicio: ${t.fechaInicio} - Fecha límite: ${t.fechaFin} - Completa: ${t.completa ? 'Si' : 'No'}`;
+
+        const btnBorrar = document.createElement('button');
+        btnBorrar.textContent = 'Borrar';
+        btnBorrar.addEventListener('click', async () => {
+            await fetch('/tareas/' + t.id, {
+                method: 'DELETE',
+                headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}
+            });
+            cargarTareas();
+        });
+
+        const btnCompletar = document.createElement('button');
+        btnCompletar.textContent = t.completa ? 'Pendiente' : 'Completa';
+        btnCompletar.addEventListener('click', async () => {
+            await fetch('/tareas/' + t.id, {
+                method: 'PUT',
+                headers: {
+                    'content-type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                },
+                body: JSON.stringify({completa: !t.completa})
+            });
+            cargarTareas();
+        });
+
+        li.append(btnCompletar, btnBorrar);
+        lista.append(li);
+    });
+}
+//------------------------------------AGREGAR---------------------------------------------
+document.getElementById('agregarTarea').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const nombre = document.getElementById('nombreTarea').value;
+    const descripcion = document.getElementById('descripcion').value;
+    const fechaInicio = document.getElementById('fechaInicio').value;
+    const fechaFin = document.getElementById('fechaFin').value;
+    const completa = document.getElementById('completa').checked;
+
+    const respuesta = await fetch('/tareas', {
+        method: 'POST',
+        headers: {
+            'content-type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+        },
+        body: JSON.stringify({nombre, descripcion, fechaInicio, fechaFin, completa})
+    });
+    const datos = await respuesta.json();
+
+    if(!respuesta.ok){
+        return mostrarMensaje(datos.error);
+    }
+
+    cargarTareas();
+    e.target.reset();
+    mostrar('seccionVer', 'seccionAgregar');
+});
+
+document.getElementById('volverInicioSesion').addEventListener('click', () => mostrar('seccionLogin'));
+document.getElementById('botonRegistro').addEventListener('click', () => mostrar('seccionRegistro'));
+document.getElementById('cerrarSesion').addEventListener('click', () => {
+    localStorage.removeItem('token'); mostrar('seccionLogin')
+});
+
+</script>
+</body>
+</html>

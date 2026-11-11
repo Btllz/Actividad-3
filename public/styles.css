@@ -1,0 +1,159 @@
+:root {
+    --fondo: #f3f4f6;
+    --tarjeta: #ffffff;
+    --texto: #1f2937;
+    --principal: #4f46e5;
+    --principal-hover: #4338ca;
+    --peligro: #dc2626;
+    --peligro-hover: #b91c1c;
+    --borde: #d1d5db;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 24px 16px;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: var(--fondo);
+    color: var(--texto);
+    line-height: 1.5;
+}
+
+.oculto {
+    display: none !important;
+}
+
+/* Mensaje de error */
+#errorMensaje {
+    max-width: 480px;
+    margin: 0 auto 16px;
+    padding: 12px 16px;
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fca5a5;
+    border-radius: 8px;
+}
+
+/* Tarjetas (secciones) */
+#seccionRegistro,
+#seccionLogin,
+#seccionVer,
+#seccionAgregar {
+    max-width: 480px;
+    margin: 0 auto 24px;
+    padding: 24px;
+    background: var(--tarjeta);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+h1, h2 {
+    margin-top: 0;
+    text-align: center;
+}
+
+/* Formularios */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="date"] {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 1rem;
+    border: 1px solid var(--borde);
+    border-radius: 8px;
+}
+
+input:focus {
+    outline: 2px solid var(--principal);
+    border-color: transparent;
+}
+
+label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Botones */
+button {
+    padding: 10px 14px;
+    font-size: 1rem;
+    color: #fff;
+    background: var(--principal);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+button:hover {
+    background: var(--principal-hover);
+}
+
+/* Botones secundarios (cambiar entre login y registro) */
+#botonRegistro,
+#volverInicioSesion {
+    color: var(--principal);
+    background: transparent;
+    border: 1px solid var(--principal);
+}
+
+#botonRegistro:hover,
+#volverInicioSesion:hover {
+    background: #eef2ff;
+}
+
+#cerrarSesion {
+    margin-top: 16px;
+    background: #6b7280;
+}
+
+#cerrarSesion:hover {
+    background: #4b5563;
+}
+
+/* Lista de tareas */
+#listaTareas {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+#listaTareas li {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    padding: 12px;
+    border: 1px solid var(--borde);
+    border-radius: 8px;
+    background: #f9fafb;
+    overflow-wrap: anywhere;
+}
+
+#listaTareas li button {
+    padding: 6px 10px;
+    font-size: 0.9rem;
+}
+
+/* El último botón de cada tarea es "Borrar" */
+#listaTareas li button:last-child {
+    background: var(--peligro);
+}
+
+#listaTareas li button:last-child:hover {
+    background: var(--peligro-hover);
+}

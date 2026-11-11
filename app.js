@@ -15,6 +15,7 @@ const ruta_tareas = path.join(carpetaData, 'tareas.json');
 const ruta_usuarios = path.join(carpetaData, 'users.json');
  
 app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public')));//si piden un archivo que exista en public, entregalo
 
 
 fs.mkdirSync(carpetaData, {recursive: true});
@@ -130,14 +131,14 @@ app.post('/auth/login', async (req, res) => {
 //-----------------------------------------------AGREGAR TAREA--------------------------------------------
 app.post('/tareas', verificarToken, (req, res) => {
     
-    const {nombre , descripcion, fechaInicio, fechaFin, } = req.body;
+    const {nombre , descripcion, fechaInicio, fechaFin, completa} = req.body;
 
     if(!nombre || !descripcion || !fechaInicio || !fechaFin) {
         return res.status(400).json({error: 'Faltan campos por llenar'});
     }
 
     const tareas = obtenerTareas();
-    const nuevo = {id: id(), usuarioId: req.usuario.id, nombre , descripcion , fechaInicio , fechaFin , completa: false};
+    const nuevo = {id: id(), usuarioId: req.usuario.id, nombre , descripcion , fechaInicio , fechaFin , completa: completa === true};
     tareas.push(nuevo);
     guardarTareas(tareas);
     res.status(201).json(nuevo);
@@ -161,10 +162,10 @@ app.put('/tareas/:id', verificarToken, (req, res)=>{
     // const {nombre, descripcion, fechaInicio, fechaFin, completa} = req.body;
     const tareas = obtenerTareas();
 
-    const tarea = tareas.find(t => t.id === t.usuarioId);
+    const tarea = tareas.find(t => t.id === idTareas && t.usuarioId === req.usuario.id);
 
     if (!tarea){
-        return res.send(404).json({error: 'Tarea no encontrada'});
+        return res.status(404).json({error: 'Tarea no encontrada'});
     }
 
     tarea.nombre = req.body.nombre ?? tarea.nombre;
@@ -176,7 +177,7 @@ app.put('/tareas/:id', verificarToken, (req, res)=>{
 
     guardarTareas(tareas);
 
-    res.json()({mensaje: 'Tarea actualizada', tarea});
+    res.json({mensaje: 'Tarea actualizada', tarea});
 
 });
 
