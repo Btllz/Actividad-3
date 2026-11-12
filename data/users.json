@@ -18,5 +18,10 @@
     "id": 7,
     "correo": "admin67@correo.com",
     "password": "$2b$10$qAAwMWgnOCvYFoBMsRnQnec1hdQPHqlyyQzRLlAxDMc.aDz4hmNQ."
+  },
+  {
+    "id": 8,
+    "correo": "correo2@correo.com",
+    "password": "$2b$10$/w03hoyLh6HWwDmd0y5zYOWKSoIdoH5VZ7PoHlYmvfhBcKiUt8mGK"
   }
 ]
